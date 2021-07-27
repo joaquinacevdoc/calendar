@@ -1,0 +1,1329 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,700,900');
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,700,900');
+/* General
+_________________________________________*/
+html {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+*, +:before, *:after {
+  -webkit-box-sizing: inherit;
+          box-sizing: inherit;
+}
+
+body{
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+  font-family: 'Montserrat', sans-serif;
+  color: #202020;
+  background-color: white;
+  font-smooth: always;
+  -webkit-font-smoothing: antialised;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+ul{
+  margin:0;
+  padding: 0;
+}
+
+/* Constants
+______________________________________________________________________ */
+$generic-box-shadow: rgba(0,0,0,0.1) 0px 0px 0px 1px, rgba(0,0,0,0.1) 0px 4px 11px;
+$generic-border: 1px solid #f1f1f1;
+$generic-bg: #db4c3f;
+$sidebar-width: 290px;
+
+/* Mixins
+___________________________________________ */
+
+@mixin box-overlay() {
+  -webkit-box-shadow: $generic-box-shadow;
+          box-shadow: $generic-box-shadow;
+  position: relative;
+  width: 100%;
+  top: 85px;
+  border-radius: 3px;
+}
+
+@mixin va($va-align: center) {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+
+  @if $va-align != center {
+    -webkit-box-pack: left;
+        -ms-flex-pack: left;
+            justify-content: left;
+  } @else {
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+  }
+}
+
+// So that the user can't select
+@mixin no-select {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+@mixin btn($width) {
+  width: $width;
+  background-color: $generic-bg;
+  color: #fff !important;
+  border: 1px solid transparent;
+  margin-right: 5px;
+  margin-top: 10px;
+  font-weight: bold;
+  font-size: 12px !important;
+  line-height: 17px;
+  padding: 6px 12px 7px 12px;
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
+  border-radius: 5px !important;
+  text-decoration: none !important;
+  text-align: center;
+  cursor: pointer;
+  &:hover {
+    background-color: #e0685d;
+  }
+}
+
+@mixin cancel($width) {
+  width: $width;
+  background-color: #f5f5f5;
+  color: black !important;
+  border: 1px solid #9c9c9c;
+  margin-right: 5px;
+  margin-top: 10px;
+  font-size: 12px !important;
+  line-height: 17px;
+  padding: 6px 12px 7px 12px;
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
+  border-radius: 5px !important;
+  text-decoration: none !important;
+  text-align: center;
+  cursor: pointer;
+  &:hover {
+    background-color: #d1d1d1;
+    transition: 0.2s;
+  }
+}
+
+@mixin transparent-button() {
+  background-color: transparent;
+  border: 0;
+}
+
+@mixin task-item() {
+  list-style-type: none;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  line-height: 18px;
+  color: #333;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-size: 14px;
+  list-style-type: none;
+  border-bottom: 1px solid #f0f0f0;
+  padding-left: 10px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #f9f9f9;
+  }
+}
+
+@mixin mq($from) {
+  @media (max-width: $from) {
+    @content;
+  }
+}
+
+/* Dark mode
+______________________________________________________________________ */
+.darkmode {
+  header {
+    -webkit-box-shadow: 0 1px 3px 0 rgba(0,0,0,0.15);
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,0.15);
+    background-color: #282828;
+    border-color: transparent;
+  }
+}
+
+/* Header
+____________________________________________________________ */
+header {
+  @include no-select;
+  border-bottom: solid 1px #ca2100;
+  background-color: $generic-bg;
+  -webkit-transition: height 200ms ease-in;
+  transition: height 200ms ease-in;
+  -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+  height: 44px;
+  z-index: 10;
+  position: fixed;
+  top: 0;
+  width: 100%;
+
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 44px;
+
+    p, li {
+      color: white;
+    }
+
+    div {
+      &.left-side {
+        margin-left: 43px;
+        @include mq("800px") {
+          margin-left: 10px;
+        }
+
+        ul li {
+          @include va;
+          list-style-type: none;
+          cursor: pointer;
+          width: 30px;
+          height: 30px;
+          float: left;
+          display: flex;
+          align-items: center;
+
+          &:hover {
+            border-radius: 3px;
+            background-color: rgba(255,255,255,0.2);
+          }
+
+          &.showSideBar {
+            margin-right: 15px;
+
+            button {
+              @include transparent-button();
+              cursor: pointer;
+              width: 100%;
+              height: 100%;
+              display: flex;
+              align-items: center;
+
+              svg {
+                height: 100%;
+                width: 100%;
+                color: white;
+              }
+            }
+          }
+
+          &.logo {
+            grid-area: 1 / 2;
+            display: flex;
+            align-items: center;
+
+            svg {
+              height: 100%;
+              width: 85%;
+              color: white;
+            }
+          }
+        }
+      }
+
+      &.settings {
+        margin-right: 43px;
+        @include mq("800px") {
+          margin-right: 10px;
+        }
+
+        ul li {
+          @include va;
+          list-style-type: none;
+          cursor: pointer;
+          width: 30px;
+          height: 30px;
+          text-align: center;
+          vertical-align: middle;
+          float: left;
+
+          &:hover {
+            border-radius: 3px;
+            background-color: rgba(255,255,255,0.2);
+          }
+
+          &.settings__add {
+            margin-right: 15px;
+
+            button {
+              @include transparent-button();
+              color: white;
+              cursor: pointer;
+              font-size: 30px;
+            }
+          }
+
+          &.settings__darkmode {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            button {
+              @include transparent-button();
+              color: white;
+              width:100%;
+              height: 100%;
+              cursor: pointer;
+
+              svg {
+                width: 20px;
+                height: 20px;
+                padding-top: 4px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+/* Main Content (Sidebar and Tasks)
+____________________________________________________________ */
+.main_content {
+  display: flex;
+}
+
+/* Sidebar
+____________________________________________________________ */
+.sidebar {
+  @include no-select();
+  max-width: $sidebar-width;
+  min-width: 195px;
+  width: calc(22%);
+  padding-top: 80px;
+  transition: width 0.5s;
+  border-right: $generic-border;
+  background-color: #f9f9f9;
+  left: 0px;
+  bottom: 0px;
+  top:0px;
+  position: fixed;
+  transition: left 0.5s;
+  z-index: 5;
+  box-shadow: none;
+
+  /* Inbox, Today and Next 7 Days
+  ________________________________________*/
+  &__generic {
+    li {
+      cursor: pointer;
+      list-style-type: none;
+      color: #333;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      line-height: 0;
+      font-size: 16px;
+      margin-left: 40px;
+      margin-right: 5px;
+      padding-left: 10px;
+      @include mq("800px") {
+        margin-left: 10px;
+      }
+
+      span:first-of-type {
+        margin-right: 10px;
+
+        &.first {
+          color: #71b3f5;
+        }
+        &.second {
+          color: #91c687;
+        }
+        &.third {
+          color: #ff8d85;
+        }
+      }
+
+      span:nth-of-type(3) {
+        margin-left: auto;
+        margin-right: 10px;
+        font-size: 12px;
+      }
+
+      &.active, &:hover {
+        font-weight: bold;
+        background-color: #DEDEDE;
+        border-radius: 7px;
+        transition: 0.2s;
+
+        span:nth-of-type(3) {
+          font-weight: normal;
+        }
+      }
+    }
+  }
+
+  /* Sidebar: Projects
+  ___________________________________*/
+  li {
+    &:hover .sidebar__project-delete {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+    }
+  }
+
+  &__projects {
+    padding-left: 25px;
+    padding-right: 5px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .project-button {
+    width: 100%
+  }
+
+  .project-container {
+    display: flex;
+    width: 100%;
+    align-items: center;
+  }
+
+  &__project {
+    @include va('left');
+    line-height: 1.05;
+    cursor: pointer;
+    height: 34px;
+    width: calc(100% - 17px);
+    margin-left: 17px;
+    @include mq("800px") {
+      margin-left: -14px;
+      width: calc(100% + 10px)
+    }
+
+    &-name {
+      overflow-x: hidden;
+      overflow-y: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    &-delete {
+      margin-left: auto;
+      margin-right: 10px;
+      display: none;
+
+      svg {
+        z-index: 2;
+        color: #cacaca;
+        &.active, &:hover {
+          color: #6a6a6a;
+        }
+      }
+    }
+
+    &-dot {
+      margin-left: 11px;
+      margin-right: 12px;
+      font-size: 30px;
+      font-weight: bold;
+      padding-bottom: 4px;
+    }
+
+    &.active, &:hover {
+      font-weight: bold;
+      transition: 0.2s;
+      background-color: #DEDEDE;
+      border-radius: 10px;
+    }
+
+  }
+  /* Sidebar: Middle (Projects Title and Add Projects)
+  ______________________________________________________*/
+
+  &__middle {
+    margin-top: 25px;
+    margin-bottom: 0;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    padding-left: 50px;
+    padding-bottom: 8px;
+    @include mq("800px") {
+      padding-left: 20px;
+    }
+
+    &__title {
+      cursor: pointer;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      padding-top: 2px;
+      padding-bottom: 2px;
+
+      span {
+        color: #0000008a;
+        margin-right: 10px;
+
+        svg {
+          transition: 0.2s;
+        }
+
+        svg.hidden-projects {
+          -webkit-transform: rotate(-90deg);
+                  transform: rotate(-90deg);
+          transition: 0.2s;
+        }
+      }
+
+      h2 {
+        margin: 0;
+        color: #333;
+        font-size: 16px;
+        font-weight: bold;
+      }
+    }
+
+    &__addProject {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      padding-top: 2px;
+      padding-bottom: 2px;
+      padding-left: 2px;
+      padding-right: 3px;
+      margin-left: auto;
+      margin-right: 12px;
+      opacity: 0;
+
+      svg {
+        color: #cacaca;
+      }
+
+      &:hover {
+        cursor: pointer;
+        background-color: #DEDEDE;
+
+        svg {
+          color: #6a6a6a;
+        }
+      }
+    }
+  }
+
+  //Show "Add projects" when hovering over sidebar
+  &:hover .sidebar__middle {
+    &__addProject {
+      opacity: 1;
+    }
+  }
+}
+
+/* Adding projects
+____________________________________________________________ */
+#fullscreen-container {
+  display: none;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(90, 90, 90, 0.5);
+  z-index: 1000;
+  transition: opacity 0.2s ease-in;
+}
+
+#add-project {
+  @include box-overlay();
+  overflow-x: visible;
+  overflow-y: visible;
+  display: none;
+  opacity: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  background-color: white;
+  height: auto;
+  width: 400px;
+  border-radius: 10px;
+  flex-direction: column;
+  transition-delay: opacity 0.5s;
+  -webkit-transition: opacity 0.5s;
+  transition: opacity 0.5s;
+
+  &__header {
+    border-radius: 10px 10px 0px 0px;
+    background-color: #F9F9FB;
+    height: 40px;
+    width: 380px;
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: 20px;
+    font-weight: bold;
+    padding-left: 20px;
+    order: 1;
+  }
+
+  &__input {
+    background-color: white;
+    border-top: solid 1px #cacaca;
+    margin-bottom: 20px;
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: flex;
+    flex-grow: 2;
+    order: 2;
+
+    &__container {
+      display: flex;
+      width: 100%;
+      flex-direction: column;
+      order: 1;
+      justify-content: center;
+      align-items: left;
+      flex-grow: 2;
+
+      p {
+        margin-top: 20px;
+        padding-left: 20px;
+        padding-top: 10px;
+        margin-bottom: 10px;
+        font-size: 15px;
+        font-weight: bold;
+      }
+
+      &__name, &__color {
+        width: 350px;
+        border: 1px solid #ddd;
+        background-color: white;
+        border-radius: 5px;
+        height: 35px;
+        padding-left: 10px;
+        margin-left: 20px;
+      }
+    }
+
+    &__buttons {
+      margin-top: 40px;
+      border-top: solid 1px #cacaca;
+      width: 181px;
+      height: 40px;
+      order: 2;
+      display: flex;
+      align-items: center;
+      padding-top: 7px;
+      padding-left: 219px;
+
+      &__submit {
+        @include btn('100px');
+        order: 1;
+      }
+
+      &__cancel {
+        @include cancel('100px');
+        order: 2;
+      }
+    }
+  }
+}
+
+
+/* Deleting projects
+____________________________________________________________ */
+// Show confirm delete
+.project-delete-modal {
+  position: absolute;
+  width: 275px;
+
+  &__inner {
+    @include box-overlay();
+    z-index: 99;
+    display: flex;
+    width: 100%;
+    top: 20px;
+    background-color: white;
+    align-items: stretch;
+    flex-direction: column;
+    line-height: normal;
+    font-weight: normal;
+
+    p {
+      width: 100%;
+      text-align: center;
+      font-size: 12px;
+      margin-bottom: 5px;
+    }
+
+    &__buttons {
+      display: flex;
+      width: 100%;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+
+      button {
+        @include btn('50px');
+      }
+
+      span {
+        @include cancel('50px');
+      }
+    }
+  }
+}
+
+
+/* Tasks
+____________________________________________________________ */
+#fullscreen-container_tasks {
+  visibility: hidden;
+  position: fixed;
+  top: 44px;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background: black;
+  opacity: 0;
+  z-index: 4;
+  transition: opacity 0.4s;
+}
+
+.tasks {
+  width: 100%;
+  display: flex;
+  flex-flow: column;
+  background-color: white;
+  border-right: $generic-border;
+  padding: 80px 40px 80px calc(26%);
+  transition: padding 0.5s;
+
+  .task_header {
+    display: flex;
+    width: 88%;
+    background-color: white;
+    position: fixed;
+    margin-top: -50px;
+    border-bottom: 1px solid #cacacaca;
+
+
+    h2 {
+      word-wrap: break-word;
+      display: flex;
+      margin-top: 55px;
+      line-height: 10px;
+    }
+  }
+
+  .add-task {
+    margin-top: 15px;
+  }
+
+  &__list {
+    margin-top: 40px;
+
+    li {
+      display: flex;
+      align-items: flex-start;
+      flex-flow: column;
+      line-height: 15px;
+      color: #333;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      list-style-type: none;
+      border-bottom: 1px solid #f0f0f0;
+      width: 100%;
+      word-wrap: break-word;
+      word-break: break-all;
+
+      .checkbox-task {
+        display: flex;
+        align-items: center;
+      }
+
+      .checkbox-holder {
+        @include transparent-button();
+        margin-right: 20px;
+        padding-left: 0px;
+        line-height: 16px;
+        width: 16px;
+        height: 16px;
+
+        .checkbox {
+          cursor: pointer;
+          color: transparent;
+          border: 1px solid gray;
+          height: 16px;
+          width: 16px;
+          border-radius: 16px;
+          color: gray;
+
+          svg {
+            color: transparent;
+            height: 8px;
+            padding-top: 4.3px;
+          }
+
+          &:hover {
+            background-color: #d3d3d3;
+            transition: 0.2s;
+
+            svg {
+              color: gray;
+              transition: 0.4s;
+            }
+          }
+
+          &:active {
+            border: 2px solid gray;
+            background-color: gray;
+            transition: border 0.8s;
+            transition: background-color 0.2s;
+            transition: box-shadow 0.2s;
+
+            svg {
+              color: white;
+              transition: 0.2s;
+            }
+          }
+        }
+      }
+
+      .date-and-project {
+        font-size: 11px;
+        margin-top: 7px;
+        margin-left: 36px;
+        margin-bottom: 0px;
+        display: flex;
+        align-items: center;
+
+        .task__list__date {
+          color: #7f7f7f;
+          margin-right: 15px;
+
+          svg {
+            margin-right: 5px;
+          }
+        }
+
+        .task__list__date__late {
+          color: red;
+          margin-right: 15px;
+
+          svg {
+            margin-right: 5px;
+          }
+        }
+
+        .task__list__project {
+          color: #7f7f7f;
+          margin-right: 10px;
+
+          svg {
+            margin-right: 5px;
+          }
+        }
+      }
+    }
+  }
+}
+
+/* Add tasks
+____________________________________________________________ */
+.add-task {
+  // Overlay
+  &__overlay {
+    background: rgba(102,102,102,0.5);
+    position: absolute;
+    margin: auto;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 21;
+    -webkit-transition: opacity 0.2s ease-in;
+    transition: opacity 0.2s ease-in;
+    height: calc(100vh);
+  }
+
+  // Main (Input and buttons)
+  &__main {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+    &__container {
+      display: flex;
+      flex-direction: column;
+      border: 1px solid #aaaaaa;
+      border-radius: 5px;
+      width: 100%;
+      height: 76px;
+
+      input {
+        width: calc(100% - 20px);
+        border: 0px;
+        outline: none;
+        margin-left: 10px;
+        margin-top: 2px;
+        min-height: 35px;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .spans {
+        display: flex;
+        flex-direction: row;
+        width: calc(100% - 20px);
+
+        .add-task__date, .add-task__project {
+          @include no-select;
+          @include transparent-button();
+          max-width: 50%;
+          height: 27px;
+          position: static;
+          overflow-x: hidden;
+          display: flex;
+          align-items: center;
+          cursor: pointer;
+          margin: 0px 0px 10px 10px;
+          border: 1px solid #d4d4d4;
+          border-radius: 5px;
+          font-size: 12px;
+          color: #5c5c5c;
+          padding: 5px 5px 5px 5px;
+
+          svg {
+            color: gray;
+            height: 15px;
+            width: auto;
+            padding-right: 5px;
+          }
+
+          span {
+            max-width: 50%;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+          }
+
+          &:hover {
+            background-color: #f5f5f5;
+          }
+        }
+      }
+    }
+
+    &__buttons {
+      @include no-select;
+      display: flex;
+      flex-direction: row;
+
+      button {
+        @include btn('100px');
+      }
+
+      .add-task__cancel {
+        @include transparent-button();
+        @include cancel('100px');
+        font-weight: normal;
+      }
+    }
+  }
+
+  // "Add task" button found always under the tasks:
+  &__shallow {
+    @include no-select;
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+    cursor: pointer;
+
+    &:hover {
+      .add-task__plus {
+        color: white;
+        background-color: #dd4b39;
+      }
+      .add-task__text {
+        color: #dd4b39;
+      }
+    }
+  }
+
+  &__plus {
+    margin-left: 1px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    color: #dd4b39;
+    font-size: 16px;
+    text-align: center;
+  }
+
+  &__text {
+    display: inline-block;
+    color: #949494;
+    font-size: 16px;
+    margin-left: 20px;
+  }
+}
+
+/* Quick Add tasks
+____________________________________________________________ */
+// Overlay
+.add-task_overlay {
+  background: rgba(102,102,102,0.5);
+  margin: auto;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 21;
+  -webkit-transition: opacity 0.2s ease-in;
+  transition: opacity 0.2s ease-in;
+  display: flex;
+}
+
+.quick-add-task {
+  overflow-y: visible;
+  overflow-x: visible;
+  background-color: white;
+  padding: 10px 25px 15px 25px;
+  width:40%;
+  height: 160px;
+  min-width: 300px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  display: flex;
+  align-self: center;
+  flex-direction: column;
+  border-radius: 7px;
+
+  .header {
+    margin-bottom: 5px;
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+
+    h2 {
+      font-size: 13px;
+    }
+
+    .quick-add-task__cancel {
+      @include transparent-button();
+      cursor: pointer;
+      color: gray;
+
+      &:hover {
+        color: black;
+      }
+    }
+  }
+
+  // Main (Input and buttons)
+  &__container {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #aaaaaa;
+    border-radius: 5px;
+    width: 100%;
+    height: 76px;
+
+    input {
+      width: calc(100% - 20px);
+      border: 0px;
+      outline: none;
+      margin-left: 10px;
+      margin-top: 2px;
+      min-height: 35px;
+      word-wrap: break-word;
+      word-break: break-all;
+    }
+
+    .spans {
+      display: flex;
+      flex-direction: row;
+      width: calc(100% - 20px);
+
+      .quick-add-task__date, .quick-add-task__project {
+        @include no-select;
+        @include transparent-button();
+        max-width: 50%;
+        height: 27px;
+        position: static;
+        overflow-x: hidden;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        margin: 0px 0px 10px 10px;
+        border: 1px solid #d4d4d4;
+        border-radius: 5px;
+        font-size: 12px;
+        color: #5c5c5c;
+        padding: 5px 5px 5px 5px;
+
+        svg {
+          color: gray;
+          height: 15px;
+          width: auto;
+          padding-right: 5px;
+        }
+
+        span {
+          max-width: 50%;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+
+        &:hover {
+          background-color: #f5f5f5;
+        }
+      }
+    }
+  }
+
+  &__buttons {
+    @include no-select;
+    display: flex;
+    flex-direction: row;
+
+    button {
+      @include btn('100px');
+    }
+
+    span {
+      @include cancel('100px');
+    }
+  }
+}
+
+/* Task Date
+____________________________________________________________ */
+.task-date {
+  @include no-select;
+  @include box-overlay();
+  background-color: #fff;
+  position: static;
+  margin-top: -80px;
+  width: 200px;
+  z-index: 22;
+  display: flex;
+  flex-flow: column;
+
+  &__list {
+    width: 200px;
+    display: flex;
+    border-bottom: 1px solid #9c9c9c;
+    margin-bottom: 5px;
+  }
+
+  &__list li {
+    @include task-item();
+    display: flex;
+    width: 190px;
+    flex-flow: row;
+    align-items: center;
+    font-size: 13px;
+    line-height: 0px;
+
+    span:first-of-type {
+      margin-right: 10px;
+    }
+
+    span:nth-of-type(2) {
+      font-weight: bold;
+      color: #5f5f5f;
+    }
+
+    span:nth-of-type(3) {
+      margin-left: auto;
+      margin-right: 10px;
+    }
+  }
+
+  &__list li:nth-of-type(1){
+    svg {
+      color: #91c687;
+    }
+  }
+
+  &__list li:nth-of-type(2){
+    svg {
+      color: #fad003;
+    }
+  }
+
+  &__list li:nth-of-type(3){
+    svg {
+      color: #ff8d85;
+    }
+  }
+
+  &__calendar {
+    width: 200px;
+    display: flex;
+    flex-flow: column;
+
+    &__header {
+      display: flex;
+      width: 190px;
+      justify-content: space-between;
+      align-items: center;
+      padding: 5px 5px 5px 5px;
+
+      .month {
+        font-size: 12px;
+        font-weight: bold;
+      }
+
+      .arrows {
+        display: flex;
+        justify-content: center;
+
+        button {
+          @include transparent-button();
+          cursor: pointer;
+          color: #5c5c5c;
+
+          &:hover{
+            background-color: #f1f1f1;
+
+            svg {
+              color: black;
+            }
+          }
+        }
+
+        svg {
+          height: 10px;
+          align-self: center;
+        }
+
+        .blocked {
+          cursor: default;
+          color: #bababa;
+
+          &:hover {
+            background-color: white;
+
+            svg {
+              color: #bababa;
+            }
+          }
+        }
+      }
+    }
+
+    .week {
+      display: flex;
+      flex-flow: row;
+      justify-content: space-around;
+      align-items: center;
+      font-size: 10px;
+      height: 24px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .days {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      //background-color: #2196F3;
+      font-size: 10px;
+
+      button {
+        @include transparent-button();
+        cursor: pointer;
+        text-align: center;
+        padding: 6px;
+        font-size: 10px;
+        font-family: Montserrat;
+
+        &:hover {
+          background-color: #dadada;
+        }
+      }
+
+      .current-month:first-of-type{
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+/* Project Overlay
+____________________________________________________________ */
+.project-overlay {
+  @include box-overlay();
+  background-color: white;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  position: relative;
+  top: -38px;
+  width: 250px;
+  max-height: 150px;
+  z-index:22;
+
+  &__list li {
+    @include task-item();
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+    text-overflow: ellipsis;
+    font-size: 13px;
+    line-height: 10px;
+
+    svg {
+      fill: grey;
+      margin-right: 7px;
+    }
+  }
+}
+
+/* Colors
+______________________________________________*/
+#i6accbc {
+  color: #6accbc;
+}
+#fad003 {
+  color: #fad003;
+}
+#ff8d85 {
+  color: #ff8d85;
+}
+#ff9932 {
+  color: #ff9932;
+}
+#af38eb {
+  color: #af38eb;
+}
+#i808080 {
+  color: #808080;
+}
